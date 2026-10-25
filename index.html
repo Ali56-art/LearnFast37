@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnFast-EBA-BK-PORTAL.COM</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom Smooth Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-indigo-700 to-purple-800 min-h-screen text-slate-800 flex items-center justify-center p-4 sm:p-6">
+
+    <!-- 1. LOGIN STEP -->
+    <div id="loginStep" class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-300">
+        <div class="text-center mb-6">
+            <span class="inline-block p-3 rounded-2xl bg-indigo-50 text-indigo-600 text-3xl mb-3 shadow-inner">🌐</span>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">LearnFast-EBA-BK-PORTAL</h1>
+            <p class="text-sm text-slate-500 mt-1">Giriş yapın ve öğrenmeye hemen başlayın</p>
+        </div>
+        
+        <form onsubmit="goToBranchSelection(event)" class="space-y-4">
+            <div>
+                <label for="username" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Ad Soyad</label>
+                <input type="text" id="username" required placeholder="Ahmet Yılmaz" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+            </div>
+            
+            <div>
+                <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">E-posta Adresi</label>
+                <input type="email" id="email" required placeholder="ornek@eba.gov.tr" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+            </div>
+
+            <div>
+                <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Şifre</label>
+                <input type="password" id="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+            </div>
+
+            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <input type="checkbox" id="robotCheck" required class="w-5 h-5 accent-indigo-600 rounded cursor-pointer">
+                <label for="robotCheck" class="text-sm font-medium text-slate-700 cursor-pointer">Ben robot değilim</label>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                Devam Et ➔
+            </button>
+        </form>
+    </div>
+
+    <!-- 2. ROLE SELECTION STEP -->
+    <div id="roleStep" class="hidden w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-300">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-slate-900">Platform Rolünüzü Seçin</h2>
+            <p class="text-sm text-slate-500 mt-1">Öğrenci veya Öğretmen girişi yaparak devam edin</p>
+        </div>
+
+        <button type="button" onclick="startStudentFlow()" class="w-full mb-6 py-4 px-6 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-3 text-lg">
+            <span>🎓</span> Ben Öğrenciyim
+        </button>
+
+        <div class="relative flex py-2 items-center mb-6">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink mx-4 text-xs font-semibold uppercase text-slate-400">VEYA ÖĞRETMEN GİRİŞİ</span>
+            <div class="flex-grow border-t border-slate-200"></div>
+        </div>
+
+        <form onsubmit="completeTeacherRegistration(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Branşınız</label>
+                <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <label class="flex items-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="radio" name="branch" id="deutschTeacher" value="Deutsch Lehrerin" required class="accent-indigo-600">
+                        <span class="ml-3 text-sm font-medium text-slate-700">🇩🇪 Almanca Öğretmeni (DeuchLand)</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="radio" name="branch" id="englishTeacher" value="English Teacher" class="accent-indigo-600">
+                        <span class="ml-3 text-sm font-medium text-slate-700">🇬🇧 İngilizce Öğretmeni (Efroom)</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="radio" name="branch" id="turkishTeacher" value="Türkçe Öğretmeni" class="accent-indigo-600">
+                        <span class="ml-3 text-sm font-medium text-slate-700">📚 Türkçe Öğretmeni</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="radio" name="branch" id="mathTeacher" value="Matematik Öğretmeni" class="accent-indigo-600">
+                        <span class="ml-3 text-sm font-medium text-slate-700">📐 Matematik Öğretmeni</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="radio" name="branch" id="scienceTeacher" value="Fen Bilimleri Öğretmeni" class="accent-indigo-600">
+                        <span class="ml-3 text-sm font-medium text-slate-700">🔬 Fen Bilimleri Öğretmeni</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="radio" name="branch" id="codingTeacher" value="Kodlama Öğretmeni" class="accent-indigo-600">
+                        <span class="ml-3 text-sm font-medium text-slate-700">💻 Kodlama Öğretmeni</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="teacherClassManaged" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Sorumlu Sınıf / Şubeler</label>
+                <input type="text" id="teacherClassManaged" required placeholder="Örn: 3A, 3B, 9C" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+
+            <div>
+                <label for="teacherCode" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Güvenlik Kodu</label>
+                <input type="password" id="teacherCode" placeholder="teacher§tap" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all">
+                Öğretmen Paneline Giriş Yap
+            </button>
+        </form>
+    </div>
+
+    <!-- 3. STUDENT LEVEL STEP -->
+    <div id="studentStep" class="hidden w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-300">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-slate-900">Sınıf Bilgilerinizi Girin</h2>
+            <p class="text-sm text-slate-500 mt-1">İçerikler seviyenize göre özelleştirilecektir</p>
+        </div>
+
+        <form onsubmit="completeStudentRegistration(event)" class="space-y-4">
+            <div>
+                <label for="studentClass" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Sınıfınız</label>
+                <select id="studentClass" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all bg-white">
+                    <option value="">Seçiniz...</option>
+                    <option value="3. Sınıf">3. Sınıf</option>
+                    <option value="4. Sınıf">4. Sınıf</option>
+                    <option value="5. Sınıf">5. Sınıf</option>
+                    <option value="9. Sınıf">9. Sınıf</option>
+                    <option value="10. Sınıf">10. Sınıf</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="studentBranch" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Şubeniz</label>
+                <input type="text" id="studentBranch" required placeholder="Örn: 3A veya 9B" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all">
+                Öğrenci Portalına Başla 🚀
+            </button>
+        </form>
+    </div>
+
+    <!-- 4. MAIN DASHBOARD STEP -->
+    <div id="dashboardStep" class="hidden w-full max-w-6xl bg-white rounded-3xl shadow-2xl p-6 sm:p-10 transition-all duration-300">
+        <!-- Dashboard Top Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-100">
+            <div>
+                <div class="flex items-center gap-2 text-indigo-600 font-extrabold text-lg tracking-tight mb-1">
+                    <span>🌐</span> LearnFast-EBA-BK-PORTAL
+                </div>
+                <h3 id="welcomeMsg" class="text-2xl font-bold text-slate-900"></h3>
+                <span id="badgeInfo" class="inline-block mt-2 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold"></span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAiDrawer()" class="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-md transition-all">
+                    <span>🤖</span> AI Asistan
+                </button>
+                <button onclick="logoutApp()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">
+                    Çıkış Yap
+                </button>
+            </div>
+        </div>
+
+        <!-- Subjects Grid View -->
+        <div id="subjectListArea">
+            <h3 class="text-xl font-bold text-slate-800 mb-6">Eğitim Platformları ve Dersler</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                
+                <!-- DeuchLand Platform Card -->
+                <div id="card-DeuchLand" onclick="openSubjectDetail('DeuchLand')" class="group relative bg-gradient-to-br from-amber-500 to-orange-600 p-6 rounded-2xl text-white cursor-pointer shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">🇩🇪</div>
+                    <div class="text-xl font-bold">DeuchLand</div>
+                    <div class="text-xs text-amber-100 mt-1 font-medium">Almanca Okuma & AI Dinleme Kütüphanesi</div>
+                </div>
+
+                <!-- Efroom Platform Card -->
+                <div id="card-Efroom" onclick="openSubjectDetail('Efroom')" class="group relative bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl text-white cursor-pointer shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">🇬🇧</div>
+                    <div class="text-xl font-bold">Efroom</div>
+                    <div class="text-xs text-blue-100 mt-1 font-medium">İngilizce Eğitimi & AI Modülleri</div>
+                </div>
+
+                <!-- Türkçe -->
+                <div id="card-Türkçe" onclick="openSubjectDetail('Türkçe')" class="group relative bg-slate-50 border-2 border-slate-100 hover:border-indigo-500 p-6 rounded-2xl text-slate-800 cursor-pointer shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">📚</div>
+                    <div class="text-xl font-bold">Türkçe</div>
+                    <div class="text-xs text-slate-500 mt-1">Okuma, Anlama & Dil Bilgisi</div>
+                </div>
+
+                <!-- Matematik -->
+                <div id="card-Matematik" onclick="openSubjectDetail('Matematik')" class="group relative bg-slate-50 border-2 border-slate-100 hover:border-indigo-500 p-6 rounded-2xl text-slate-800 cursor-pointer shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">📐</div>
+                    <div class="text-xl font-bold">Matematik</div>
+                    <div class="text-xs text-slate-500 mt-1">Sayılar, İşlemler & Geometri</div>
+                </div>
+
+                <!-- Fen Bilimleri -->
+                <div id="card-FenBilimleri" onclick="openSubjectDetail('Fen Bilimleri')" class="group relative bg-slate-50 border-2 border-slate-100 hover:border-indigo-500 p-6 rounded-2xl text-slate-800 cursor-pointer shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">🔬</div>
+                    <div class="text-xl font-bold">Fen Bilimleri</div>
+                    <div class="text-xs text-slate-500 mt-1">Doğa, Maddeler & Deneyler</div>
+                </div>
+
+                <!-- Hayat Bilgisi -->
+                <div id="card-HayatBilgisi" onclick="openSubjectDetail('Hayat Bilgisi')" class="group relative bg-slate-50 border-2 border-slate-100 hover:border-indigo-500 p-6 rounded-2xl text-slate-800 cursor-pointer shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">🌱</div>
+                    <div class="text-xl font-bold">Hayat Bilgisi</div>
+                    <div class="text-xs text-slate-500 mt-1">Yaşam, Toplum & Sağlık</div>
+                </div>
+
+                <!-- Kodlama -->
+                <div id="card-Kodlama" onclick="openSubjectDetail('Kodlama')" class="group relative bg-slate-50 border-2 border-slate-100 hover:border-indigo-500 p-6 rounded-2xl text-slate-800 cursor-pointer shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                    <div class="text-4xl mb-3">💻</div>
+                    <div class="text-xl font-bold">Kodlama</div>
+                    <div class="text-xs text-slate-500 mt-1">Algoritma & Web Tasarımı</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Subject Detail View -->
+        <div id="subjectDetailArea" class="hidden">
+            <button onclick="goBackToSubjects()" class="mb-6 flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">
+                ⬅️ Geri Dön
+            </button>
+            
+            <h3 id="selectedSubjectTitle" class="text-2xl font-bold text-indigo-700 mb-6"></h3>
+
+            <!-- DeuchLand German Library Section -->
+            <div id="deutschlandLibraryArea" class="hidden">
+                <div class="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <p class="font-semibold text-slate-700">📚 DeuchLand Lesebibliothek - Kitaplar (Sonsuz Döngü)</p>
+                    <div class="relative w-full sm:w-72">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+                        <input type="text" id="bookSearchInput" oninput="filterGermanBooks()" placeholder="Buchtitel suchen..." class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm">
+                    </div>
+                </div>
+
+                <div id="bookGridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- Standard Subject Units Section -->
+            <div id="unitSectionArea" class="hidden">
+                <p class="text-slate-500 mb-4">Ünite içeriğine ve interaktif modüllere erişmek için üniteyi seçin:</p>
+                <div id="unitListContainer" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI ASSISTANT DRAWER -->
+    <div id="aiDrawer" class="fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="bg-indigo-600 text-white p-5 flex justify-between items-center">
+            <div class="flex items-center gap-2 font-bold text-lg">
+                <span>🤖</span> AI Öğretici Asistan
+            </div>
+            <button onclick="toggleAiDrawer()" class="text-white hover:bg-indigo-700 p-2 rounded-lg text-lg">✕</button>
+        </div>
+
+        <div id="aiChatBody" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50">
+            <div class="bg-slate-200 text-slate-800 p-3 rounded-2xl max-w-[85%] text-sm">
+                Merhaba! Ben sizin AI Öğrenme Asistanınızım. Sorularınızı sorabilir veya sesli komut verebilirsiniz!
+            </div>
+        </div>
+
+        <div id="typingStatus" class="px-4 py-1 text-xs text-slate-400 italic min-h-[20px]"></div>
+
+        <div class="p-4 bg-white border-t border-slate-200 space-y-2">
+            <div class="flex gap-2">
+                <input type="text" id="aiUserInput" oninput="handleUserTyping()" onkeypress="if(event.key === 'Enter') sendAiMessage()" placeholder="Sorunuzu buraya yazın..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button onclick="startVoiceRecognition()" title="Sesli Konuş" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold">🎤</button>
+                <button onclick="sendAiMessage()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition-all">Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UNIVERSAL MODAL -->
+    <div id="contentModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center font-bold text-slate-600 transition-all">✕</button>
+            <div id="modalInnerContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // APPLICATION STATE
+        let currentUser = { name: '', role: '', level: '', currentSubject: '', managedClass: '', honorific: '' };
+        let typingTimer;
+        let currentBook = null;
+        let currentBookPageIndex = 0;
+        let currentBookMode = '';
+        let workStep = 1;
+        let workAnswers = [];
+        let draggedText = '';
+        let currentUnitId = 1;
+        let quizAnswers = {};
+
+        // AI MULTI-PAGE READER STATE
+        let currentUnitPages = [];
+        let currentUnitPageIndex = 0;
+        let isAutoReading = false;
+
+        let portalStudents = JSON.parse(localStorage.getItem('portal_real_students')) || [];
+
+        // UNIT TITLES DATABASE
+        const unitNamesDatabase = {
+            "Efroom": ["1. Greetings & Everyday Words", "2. Family, Friends & Hobbies", "3. Colors, Numbers & Time", "4. Daily Routines & School Life", "5. Animals, Nature & Environment", "6. Games, Sports & Travel"],
+            "Türkçe": ["1. Harfler ve Alfabe Dünyası", "2. Eş ve Zıt Anlamlı Kelimeler", "3. Noktalama İşaretleri", "4. Yazım Kuralları", "5. Hikaye ve Metin Çözümleme", "6. Şiir ve Düş Gücü"],
+            "Matematik": ["1. Doğal Sayılar ve Basamaklar", "2. Toplama ve Çıkarma İşlemleri", "3. Çarpma ve Bölme Dünyası", "4. Kesirler", "5. Geometrik Şekiller", "6. Ölçme ve Tartma"],
+            "Fen Bilimleri": ["1. Dünyamızın Katmanları", "2. Beş Duyumuz", "3. Kuvvetin Etkileri", "4. Maddenin Hallerine Yolculuk", "5. Işık ve Ses", "6. Canlılar ve Yaşam Alanları"],
+            "Hayat Bilgisi": ["1. Okul Kuralları", "2. Evimizdeki Sorumluluklar", "3. Sağlıklı Yaşam", "4. Güvenli Hayat", "5. Doğayı Koruma", "6. Ülkemizi Tanıyalım"],
+            "Kodlama": ["1. HTML Temel Yapısı", "2. Sayfa Başlıkları", "3. Body ve İçerik", "4. CSS ile Tasarım", "5. JavaScript Temelleri", "6. Web Projesi Geliştirme"]
+        };
+
+        // MULTI-PAGE TEXT CONTENT FOR VOICE READER
+        const unitMultiPageDatabase = {
+            "Efroom": [
+                "Page 1: Welcome to Efroom English learning platform! In this unit, we practice greetings and polite daily conversation.",
+                "Page 2: Always remember to say 'Good morning' in the morning and 'Nice to meet you' when meeting someone new.",
+                "Page 3: English is fun when you practice speaking out loud every single day. Keep going!"
+            ],
+            "Türkçe": [
+                "Sayfa 1: Türkçe dersimizin ilk bölümünde dilimizin temelini oluşturan harflerimizi ve alfabemizi inceliyoruz.",
+                "Sayfa 2: Alfabemizde 29 harf bulunur. Bunların 8 tanesi ünlü, 21 tanesi ise ünsüz harflerden oluşmaktadır.",
+                "Sayfa 3: Cümle kurarken kelimeler arasındaki anlam ilişkilerine dikkat etmek okuma kalitemizi artırır."
+            ],
+            "Matematik": [
+                "Sayfa 1: Matematik dersine hoş geldiniz! Bu ünitede doğal sayıları ve basamak değerlerini detaylıca öğreniyoruz.",
+                "Sayfa 2: Sayıları oluşturan rakamların bulunduğu konuma basamak denir. Birler ve onlar basamağı temel birimlerdir.",
+                "Sayfa 3: Zihinden toplama ve çıkarma yapmak matematiksel işlem hızınızı geliştirecektir."
+            ]
+        };
+
+        // INTERACTIVE WORK ACTIVITIES
+        const workDatabase = {
+            "Efroom": [
+                { q: "What is the greeting for the morning?", correct: "Good Morning", options: ["Good Morning", "Good Night", "Goodbye"] },
+                { q: "How do you say 'Teşekkür ederim' in English?", correct: "Thank you", options: ["Please", "Thank you", "Sorry"] },
+                { q: "Which color represents 'Mavi'?", correct: "Blue", options: ["Red", "Blue", "Green"] },
+                { q: "What is the English word for 'Kedi'?", correct: "Cat", options: ["Dog", "Cat", "Bird"] },
+                { q: "Number 10 in English?", correct: "Ten", options: ["Five", "Ten", "Twenty"] }
+            ],
+            "Türkçe": [
+                { q: "Alfabemizin ilk harfi hangisidir?", correct: "A", options: ["A", "Z", "M"] },
+                { q: "Yazılışları farklı anlamları aynı kelimeler?", correct: "Eş Anlamlı", options: ["Eş Anlamlı", "Zıt Anlamlı", "Eş Sesli"] },
+                { q: "Soru cümlelerinin sonuna ne konur?", correct: "Soru İşareti", options: ["Nokta", "Soru İşareti", "Virgül"] },
+                { q: "Özel isimlerin baş harfi nasıl yazılır?", correct: "Büyük Harf", options: ["Büyük Harf", "Küçük Harf", "Eğik"] },
+                { q: "Metnin vermek istediği temel mesaja ne denir?", correct: "Ana Fikir", options: ["Ana Fikir", "Başlık", "Hece"] }
+            ]
+        };
+
+        // 10-QUESTION QUIZZES
+        const quizDatabase = {
+            "Efroom": [
+                { q: "Which one is a color?", options: ["A) Apple", "B) Yellow", "C) Dog"], ans: "B" },
+                { q: "'Good evening' means?", options: ["A) İyi akşamlar", "B) Günaydın", "C) Hoşça kal"], ans: "A" },
+                { q: "How do you count 1, 2, 3 in English?", options: ["A) One, Two, Three", "B) Ten, Nine, Eight", "C) Red, Blue, Green"], ans: "A" },
+                { q: "'Teacher' means in Turkish?", options: ["A) Öğrenci", "B) Öğretmen", "C) Okul"], ans: "B" },
+                { q: "Which animal says 'Meow'?", options: ["A) Dog", "B) Cat", "C) Lion"], ans: "B" },
+                { q: "Opposite of 'Big'?", options: ["A) Small", "B) Tall", "C) Long"], ans: "A" },
+                { q: "Which day comes after Monday?", options: ["A) Sunday", "B) Tuesday", "C) Friday"], ans: "B" },
+                { q: "'Thank you' response?", options: ["A) You are welcome", "B) No", "C) Hello"], ans: "A" },
+                { q: "What color is the sky?", options: ["A) Green", "B) Blue", "C) Yellow"], ans: "B" },
+                { q: "Which one is a fruit?", options: ["A) Banana", "B) Car", "C) Book"], ans: "A" }
+            ],
+            "Türkçe": [
+                { q: "Alfabemizde toplam kaç harf bulunur?", options: ["A) 28", "B) 29", "C) 30"], ans: "B" },
+                { q: "Hangisi ünlü bir harftir?", options: ["A) B", "B) K", "C) A"], ans: "C" },
+                { q: "'Ak - Kara' kelimeleri ne tür ilişkiye sahiptir?", options: ["A) Eş anlamlı", "B) Zıt anlamlı", "C) Eş sesli"], ans: "B" },
+                { q: "Cümlenin sonuna hangisi konur?", options: ["A) Virgül", "B) Nokta", "C) Kısa çizgi"], ans: "B" },
+                { q: "Hangisi özel isimdir?", options: ["A) İstanbul", "B) masa", "C) kedi"], ans: "A" },
+                { q: "'Okul' kelimesinin eş anlamlısı nedir?", options: ["A) Mektep", "B) Ev", "C) Sınıf"], ans: "A" },
+                { q: "Şiirin her bir satırına ne ad verilir?", options: ["A) Kıta", "B) Mısra", "C) Paragraf"], ans: "B" },
+                { q: "Hangisinde yazım yanlışı vardır?", options: ["A) Ankara'ya", "B) Atatürk", "C) Türkiye de"], ans: "C" },
+                { q: "Soru anlamı taşıyan cümlenin sonuna ne konur?", options: ["A) ?", "B) !", "C) ."], ans: "A" },
+                { q: "Duygu belirten ifadelerin sonuna ne konur?", options: ["A) !", "B) ?", "C) ."], ans: "A" }
+            ]
+        };
+
+        // GERMAN BOOKS DATABASE (DEUCHLAND)
+        let germanBooksPool = [
+            {
+                id: "db1", title: "Das Geheimnis des alten Schlosses",
+                img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop&q=80",
+                pages: [
+                    "Kapitel 1: Tief im Schwarzwald stand ein verlassenes Schloss aus dem Mittelalter.",
+                    "Kapitel 2: Die Dorfbewohner erzählten geheimnisvolle Geschichten über verzauberte Räume.",
+                    "Kapitel 3: Der junge Jonas beschloss, das Schloss gründlich zu erforschen."
+                ]
+            },
+            {
+                id: "db2", title: "Reise durch die Alpen",
+                img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&auto=format&fit=crop&q=80",
+                pages: [
+                    "Kapitel 1: Die Alpen glänzten im strahlenden Morgenlicht weiß und prachtvoll.",
+                    "Kapitel 2: Klara und ihr Hund Bruno machten sich bereit für die Wanderung."
+                ]
+            }
+        ];
+
+        window.onload = function() {
+            const savedUser = localStorage.getItem('learnfast_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        };
+
+        function goToBranchSelection(event) {
+            event.preventDefault();
+            if (!document.getElementById('robotCheck').checked) {
+                alert("Lütfen robot olmadığınızı doğrulayın!");
+                return;
+            }
+            currentUser.name = document.getElementById('username').value;
+            document.getElementById('loginStep').classList.add('hidden');
+            document.getElementById('roleStep').classList.remove('hidden');
+        }
+
+        function startStudentFlow() {
+            currentUser.role = 'Student';
+            document.getElementById('roleStep').classList.add('hidden');
+            document.getElementById('studentStep').classList.remove('hidden');
+        }
+
+        function completeStudentRegistration(event) {
+            event.preventDefault();
+            const studentBranchVal = document.getElementById('studentBranch').value.trim().toUpperCase();
+            currentUser.level = `${document.getElementById('studentClass').value} - Şube: ${studentBranchVal}`;
+            currentUser.branchName = studentBranchVal;
+            
+            let existing = portalStudents.find(s => s.name === currentUser.name);
+            if (!existing) {
+                portalStudents.push({ name: currentUser.name, class: studentBranchVal, readBooks: [], listenedBooks: [], doneWorks: [], doneQuizzes: [] });
+                localStorage.setItem('portal_real_students', JSON.stringify(portalStudents));
+            }
+
+            localStorage.setItem('learnfast_user', JSON.stringify(currentUser));
+            showDashboard();
+        }
+
+        function completeTeacherRegistration(event) {
+            event.preventDefault();
+            if (document.getElementById('teacherCode').value !== "teacher§tap") {
+                alert("Hatalı öğretmen güvenlik şifresi!");
+                return;
+            }
+            currentUser.role = 'Teacher';
+            currentUser.level = document.querySelector('input[name="branch"]:checked').value;
+            currentUser.managedClass = document.getElementById('teacherClassManaged').value.trim().toUpperCase();
+            currentUser.honorific = (currentUser.name.toLowerCase().includes('hanım') || currentUser.name.toLowerCase().includes('frau')) ? "Hanım" : "Bey";
+            localStorage.setItem('learnfast_user', JSON.stringify(currentUser));
+            showDashboard();
+        }
+
+        function showDashboard() {
+            document.getElementById('loginStep').classList.add('hidden');
+            document.getElementById('roleStep').classList.add('hidden');
+            document.getElementById('studentStep').classList.add('hidden');
+            document.getElementById('dashboardStep').classList.remove('hidden');
+
+            const welcomeMsg = document.getElementById('welcomeMsg');
+            const allSubjects = ['DeuchLand', 'Efroom', 'Matematik', 'Türkçe', 'FenBilimleri', 'HayatBilgisi', 'Kodlama'];
+
+            if (currentUser.role === 'Teacher') {
+                welcomeMsg.innerText = `Hoş geldiniz ${currentUser.name} ${currentUser.honorific} (${currentUser.managedClass})`;
+                const teacherBranch = currentUser.level;
+
+                allSubjects.forEach(subj => {
+                    const cardId = `card-${subj}`;
+                    const card = document.getElementById(cardId);
+                    if (!card) return;
+
+                    if (teacherBranch === 'Deutsch Lehrerin' && subj === 'DeuchLand') {
+                        card.classList.remove('opacity-40', 'pointer-events-none');
+                    } else if (teacherBranch === 'English Teacher' && subj === 'Efroom') {
+                        card.classList.remove('opacity-40', 'pointer-events-none');
+                    } else if (teacherBranch.includes(subj)) {
+                        card.classList.remove('opacity-40', 'pointer-events-none');
+                    } else if (currentUser.role === 'Teacher') {
+                        card.classList.add('opacity-40', 'pointer-events-none');
+                    }
+                });
+            } else {
+                welcomeMsg.innerText = `Hoş geldin, ${currentUser.name}! 🚀`;
+                allSubjects.forEach(subj => {
+                    const card = document.getElementById(`card-${subj}`);
+                    if (card) card.classList.remove('opacity-40', 'pointer-events-none');
+                });
+            }
+            document.getElementById('badgeInfo').innerText = `Rol / Seviye: ${currentUser.level}`;
+        }
+
+        function logoutApp() {
+            window.speechSynthesis.cancel();
+            localStorage.removeItem('learnfast_user');
+            currentUser = { name: '', role: '', level: '', currentSubject: '', managedClass: '', honorific: '' };
+            document.getElementById('dashboardStep').classList.add('hidden');
+            document.getElementById('subjectDetailArea').classList.add('hidden');
+            document.getElementById('subjectListArea').classList.remove('hidden');
+            document.getElementById('loginStep').classList.remove('hidden');
+        }
+
+        function openSubjectDetail(subjectName) {
+            currentUser.currentSubject = subjectName;
+            document.getElementById('subjectListArea').classList.add('hidden');
+            document.getElementById('subjectDetailArea').classList.remove('hidden');
+
+            if (subjectName === 'DeuchLand') {
+                document.getElementById('selectedSubjectTitle').innerText = `DeuchLand Platformu - Lesebibliothek`;
+                document.getElementById('deutschlandLibraryArea').classList.remove('hidden');
+                document.getElementById('unitSectionArea').classList.add('hidden');
+                renderGermanLibrary();
+            } else {
+                document.getElementById('selectedSubjectTitle').innerText = `${subjectName} ${subjectName === 'Efroom' ? 'Platformu' : 'Dersi'}`;
+                document.getElementById('deutschlandLibraryArea').classList.add('hidden');
+                document.getElementById('unitSectionArea').classList.remove('hidden');
+                renderSubjectUnits(subjectName);
+            }
+        }
+
+        function goBackToSubjects() {
+            window.speechSynthesis.cancel();
+            currentUser.currentSubject = '';
+            document.getElementById('subjectDetailArea').classList.add('hidden');
+            document.getElementById('subjectListArea').classList.remove('hidden');
+        }
+
+        function renderSubjectUnits(subjectName) {
+            const container = document.getElementById('unitListContainer');
+            container.innerHTML = "";
+            const isTeacher = (currentUser.role === 'Teacher');
+            const unitTitles = unitNamesDatabase[subjectName] || [
+                "1. Temel Konular", "2. Gelişmiş Beceriler", "3. Uygulamalar", "4. Problemler", "5. Projeler", "6. Genel Tekrar"
+            ];
+
+            for (let i = 1; i <= 6; i++) {
+                container.innerHTML += `
+                    <div class="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-sm hover:shadow-md transition-all">
+                        <div onclick="toggleUnit(${i})" class="p-5 bg-slate-50 hover:bg-slate-100 font-bold text-slate-800 cursor-pointer flex justify-between items-center transition-colors">
+                            <span class="flex items-center gap-2">📌 ${unitTitles[i - 1]}</span>
+                            <span id="unitIcon-${i}" class="text-indigo-600">➕</span>
+                        </div>
+                        <div id="unitBody-${i}" class="hidden p-5 space-y-3 bg-white border-t border-slate-100">
+                            <div class="flex items-center gap-2">
+                                <button onclick="openUnityReader(${i})" class="flex-1 text-left px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-xl text-sm transition-all">
+                                    📖 Ünite Yazı Okuma (AI Otomatik Sesli Sayfa Sayfa)
+                                </button>
+                                ${isTeacher ? `<button onclick="triggerTeacherAnalytics('${subjectName}', ${i})" class="px-3 py-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold">⋮</button>` : ''}
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="startWork(${i})" class="flex-1 text-left px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded-xl text-sm transition-all">
+                                    📝 Ünite Çalışması (Sürükle / Dokunmatik)
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openQuiz(${i})" class="flex-1 text-left px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold rounded-xl text-sm transition-all">
+                                    🎯 Konu Tarama Testi (10 Soru)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function toggleUnit(unitId) {
+            const body = document.getElementById(`unitBody-${unitId}`);
+            const icon = document.getElementById(`unitIcon-${unitId}`);
+            if (body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.innerText = "➖";
+            } else {
+                body.classList.add('hidden');
+                icon.innerText = "➕";
+            }
+        }
+
+        // AI MULTI-PAGE VOICE READER
+        function openUnityReader(unitNo) {
+            currentUnitPages = unitMultiPageDatabase[currentUser.currentSubject] || unitMultiPageDatabase["Türkçe"];
+            currentUnitPageIndex = 0;
+            isAutoReading = false;
+
+            showModal(`
+                <h3 class="text-xl font-bold text-slate-900 mb-4">📖 ${currentUser.currentSubject} - Ünite ${unitNo} Çok Sayfalı Okuma</h3>
+                <div class="bg-indigo-900 text-white rounded-2xl p-6 text-center shadow-inner">
+                    <div id="unityPageDisplay" class="bg-indigo-950/80 rounded-xl p-5 min-h-[160px] flex items-center justify-center text-left text-indigo-100 text-base leading-relaxed mb-4"></div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <button id="prevUnitPageBtn" onclick="changeUnitPage(-1)" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-semibold disabled:opacity-40">⬅️ Önceki Sayfa</button>
+                        <span id="unitPageTrackerText" class="text-xs font-bold text-indigo-200">Sayfa 1 / ${currentUnitPages.length}</span>
+                        <button id="nextUnitPageBtn" onclick="changeUnitPage(1)" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-semibold disabled:opacity-40">Sonraki Sayfa ➔</button>
+                    </div>
+
+                    <button onclick="startAutoReading()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg transition-all mb-2">
+                        🔊 Yapay Zekaya Otomatik Sayfa Sayfa Okut
+                    </button>
+                    <button onclick="closeModal()" class="w-full py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl transition-all">
+                        Kapat
+                    </button>
+                </div>
+            `);
+            updateUnitPageDisplay();
+        }
+
+        function updateUnitPageDisplay() {
+            const text = currentUnitPages[currentUnitPageIndex];
+            document.getElementById('unityPageDisplay').innerHTML = `<div><b>Sayfa ${currentUnitPageIndex + 1}:</b><br><br>${text}</div>`;
+            document.getElementById('unitPageTrackerText').innerText = `Sayfa ${currentUnitPageIndex + 1} / ${currentUnitPages.length}`;
+            document.getElementById('prevUnitPageBtn').disabled = (currentUnitPageIndex === 0);
+            document.getElementById('nextUnitPageBtn').disabled = (currentUnitPageIndex === currentUnitPages.length - 1);
+        }
+
+        function changeUnitPage(delta) {
+            window.speechSynthesis.cancel();
+            isAutoReading = false;
+            currentUnitPageIndex += delta;
+            if (currentUnitPageIndex < 0) currentUnitPageIndex = 0;
+            if (currentUnitPageIndex >= currentUnitPages.length) currentUnitPageIndex = currentUnitPages.length - 1;
+            updateUnitPageDisplay();
+        }
+
+        function startAutoReading() {
+            window.speechSynthesis.cancel();
+            isAutoReading = true;
+            playNextAutoPage();
+        }
+
+        function playNextAutoPage() {
+            if (!isAutoReading || currentUnitPageIndex >= currentUnitPages.length) {
+                if (currentUnitPageIndex >= currentUnitPages.length) {
+                    alert("🎉 Tüm sayfalar Yapay Zeka tarafından okundu!");
+                }
+                return;
+            }
+
+            updateUnitPageDisplay();
+            const textToRead = currentUnitPages[currentUnitPageIndex];
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.lang = (currentUser.currentSubject === 'Efroom') ? 'en-US' : 'tr-TR';
+
+            utterance.onend = function() {
+                if (isAutoReading) {
+                    currentUnitPageIndex++;
+                    if (currentUnitPageIndex < currentUnitPages.length) {
+                        setTimeout(playNextAutoPage, 1000);
+                    } else {
+                        updateUnitPageDisplay();
+                        alert("🎉 Tüm ünite sayfaları seslendirildi!");
+                    }
+                }
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // WORK ACTIVITIES (DRAG & TOUCH)
+        function startWork(unitNo) {
+            currentUnitId = unitNo;
+            workStep = 1;
+            workAnswers = [];
+            renderWorkQuestion(unitNo);
+        }
+
+        function renderWorkQuestion(unitNo) {
+            const list = workDatabase[currentUser.currentSubject] || workDatabase["Türkçe"];
+            const qData = list[workStep - 1];
+
+            let optionsHtml = qData.options.map(opt => `
+                <div draggable="true" ondragstart="drag(event, '${opt}')" onclick="selectItemTouch('${opt}')" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl font-bold text-slate-700 cursor-pointer text-center select-none transition-all">
+                    ${opt}
+                </div>
+            `).join('');
+
+            showModal(`
+                <h3 class="text-xl font-bold text-slate-900 mb-2">📝 ${currentUser.currentSubject} - Ünite ${unitNo} Çalışması (${workStep} / 5)</h3>
+                <p class="text-base font-semibold text-slate-800 mb-1">Soru ${workStep}: ${qData.q}</p>
+                <p class="text-xs text-slate-400 mb-4">Seçeneğe dokunun veya aşağıdaki kutuya sürükleyin:</p>
+                
+                <div class="grid grid-cols-3 gap-3 mb-4">${optionsHtml}</div>
+                
+                <div id="dropArea" ondrop="drop(event)" ondragover="event.preventDefault()" class="min-h-[60px] border-2 border-dashed border-indigo-400 bg-indigo-50/50 rounded-xl flex items-center justify-center font-bold text-indigo-700 p-3 mb-6">
+                    Seçilen Cevap Buraya Gelecek
+                </div>
+
+                ${workStep < 5 
+                    ? `<button onclick="nextWorkQuestion()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all">Sonraki Soruya Geç ➔</button>`
+                    : `<button onclick="finishWork()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all">Sonuçları Gör 📊</button>`
+                }
+            `);
+        }
+
+        function drag(ev, text) { draggedText = text; }
+        function drop(ev) {
+            ev.preventDefault();
+            draggedText = ev.dataTransfer.getData("text") || draggedText;
+            document.getElementById('dropArea').innerText = `Seçilen: ${draggedText}`;
+            workAnswers[workStep - 1] = draggedText;
+        }
+
+        function selectItemTouch(text) {
+            draggedText = text;
+            document.getElementById('dropArea').innerText = `Seçilen: ${draggedText}`;
+            workAnswers[workStep - 1] = draggedText;
+        }
+
+        function nextWorkQuestion() {
+            if (!workAnswers[workStep - 1]) { alert("Lütfen bir cevap seçin!"); return; }
+            workStep++;
+            renderWorkQuestion(currentUnitId);
+        }
+
+        function finishWork() {
+            if (!workAnswers[4]) { alert("Lütfen son soruyu da cevaplayın!"); return; }
+            const list = workDatabase[currentUser.currentSubject] || workDatabase["Türkçe"];
+            let html = `<h3 class="text-xl font-bold text-slate-900 mb-4">📊 Çalışma Sonuçları</h3><div class="space-y-2 mb-6">`;
+            
+            list.forEach((item, i) => {
+                const ok = workAnswers[i] === item.correct;
+                html += `<div class="p-3 rounded-xl ${ok ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'} font-medium text-sm">Soru ${i+1}: Cevabınız: ${workAnswers[i]} | Doğru: ${item.correct} ${ok ? '✅' : '❌'}</div>`;
+            });
+
+            html += `</div><button onclick="closeModal()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl">Tamamla</button>`;
+            showModal(html);
+        }
+
+        // 10-QUESTION QUIZ MODULE
+        function openQuiz(unitNo) {
+            currentUnitId = unitNo;
+            quizAnswers = {};
+            const list = quizDatabase[currentUser.currentSubject] || quizDatabase["Türkçe"];
+            let html = `<h3 class="text-xl font-bold text-slate-900 mb-4">🎯 ${currentUser.currentSubject} - Ünite ${unitNo} Testi (10 Soru)</h3><div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 mb-6">`;
+
+            list.forEach((item, index) => {
+                const qNum = index + 1;
+                html += `
+                    <div class="p-4 border border-slate-200 rounded-xl bg-slate-50">
+                        <p class="font-bold text-slate-800 text-sm mb-2">${qNum}. ${item.q}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            ${item.options.map(opt => `
+                                <button id="q_${qNum}_${opt[0]}" onclick="selectAnswer(${qNum}, '${opt[0]}')" class="px-3 py-2 bg-white hover:bg-indigo-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 text-left transition-all">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div><button onclick="finishQuiz()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl">Testi Bitir ve Sonucu Gör</button>`;
+            showModal(html);
+        }
+
+        function selectAnswer(qNum, option) {
+            quizAnswers[qNum] = option;
+            ['A', 'B', 'C'].forEach(opt => {
+                const el = document.getElementById(`q_${qNum}_${opt}`);
+                if (el) el.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+            });
+            const selectedEl = document.getElementById(`q_${qNum}_${option}`);
+            if (selectedEl) selectedEl.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+        }
+
+        function finishQuiz() {
+            if (Object.keys(quizAnswers).length < 10) { alert("Lütfen tüm soruları yanıtlayın!"); return; }
+            const list = quizDatabase[currentUser.currentSubject] || quizDatabase["Türkçe"];
+            let correctCount = 0;
+            let html = `<h3 class="text-xl font-bold text-slate-900 mb-2">📊 Test Sonuçları</h3><div class="space-y-2 max-h-[50vh] overflow-y-auto mb-6">`;
+
+            list.forEach((item, index) => {
+                const qNum = index + 1;
+                const userAns = quizAnswers[qNum];
+                const isCorrect = userAns === item.ans;
+                if (isCorrect) correctCount++;
+                html += `<div class="p-3 rounded-xl ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'} text-xs font-medium">Soru ${qNum}: Sizin: ${userAns} | Doğru: ${item.ans} ${isCorrect ? '✅' : '❌'}</div>`;
+            });
+
+            html = `<p class="text-lg font-bold text-indigo-700 mb-4">Toplam Başarı: ${correctCount} / 10 Doğru</p>` + html;
+            html += `</div><button onclick="closeModal()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl">Kapat</button>`;
+            showModal(html);
+        }
+
+        // DEUCHLAND LIBRARY RENDER
+        function renderGermanLibrary() {
+            const container = document.getElementById('bookGridContainer');
+            container.innerHTML = "";
+
+            germanBooksPool.forEach(book => {
+                container.innerHTML += `
+                    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between p-4">
+                        <div>
+                            <img src="${book.img}" alt="${book.title}" class="w-full h-40 object-cover rounded-xl mb-3">
+                            <h4 class="font-bold text-slate-900 text-base mb-3">📖 ${book.title}</h4>
+                        </div>
+                        <div class="space-y-2">
+                            <button onclick="openBookModal('${book.id}', 'listen')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                                🎧 KI Anhören (Yapay Zeka Sesli)
+                            </button>
+                            <button onclick="openBookModal('${book.id}', 'read')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                                📖 Selbst Lesen (Kendin Oku)
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openBookModal(bookId, mode) {
+            currentBook = germanBooksPool.find(b => b.id === bookId);
+            currentBookPageIndex = 0;
+            currentBookMode = mode;
+
+            showModal(`
+                <h3 class="text-xl font-bold text-slate-900 mb-4">📖 ${currentBook.title} (${mode === 'read' ? 'Lesen' : 'Hören'})</h3>
+                <div class="bg-indigo-900 text-white rounded-2xl p-6 text-center shadow-inner">
+                    <div id="bookPageDisplay" class="bg-indigo-950/80 rounded-xl p-5 min-h-[140px] flex items-center justify-center text-left text-indigo-100 text-base mb-4"></div>
+                    <div class="flex items-center justify-between">
+                        <button id="prevPageBtn" onclick="changeBookPage(-1)" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-semibold disabled:opacity-40">⬅️ Zurück</button>
+                        <span id="pageTrackerText" class="text-xs font-bold text-indigo-200">Seite 1 / ${currentBook.pages.length}</span>
+                        <button id="nextPageBtn" onclick="changeBookPage(1)" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-semibold">Weiter ➔</button>
+                    </div>
+                </div>
+            `);
+            updateBookPageContent();
+        }
+
+        function updateBookPageContent() {
+            window.speechSynthesis.cancel();
+            const text = currentBook.pages[currentBookPageIndex];
+            document.getElementById('bookPageDisplay').innerHTML = `<div><b>Seite ${currentBookPageIndex + 1}:</b><br><br>${text}</div>`;
+            document.getElementById('pageTrackerText').innerText = `Seite ${currentBookPageIndex + 1} / ${currentBook.pages.length}`;
+            document.getElementById('prevPageBtn').disabled = (currentBookPageIndex === 0);
+
+            if (currentBookMode === 'listen') {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'de-DE';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function changeBookPage(delta) {
+            currentBookPageIndex += delta;
+            if (currentBookPageIndex >= currentBook.pages.length) {
+                closeModal();
+                alert(`🎉 Herzlichen Glückwunsch! Du hast "${currentBook.title}" erfolgreich abgeschlossen!`);
+                return;
+            }
+            updateBookPageContent();
+        }
+
+        function filterGermanBooks() {
+            const query = document.getElementById('bookSearchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('#bookGridContainer > div');
+            cards.forEach(card => {
+                const title = card.querySelector('h4').innerText.toLowerCase();
+                if (title.includes(query)) card.style.display = 'flex';
+                else card.style.display = 'none';
+            });
+        }
+
+        function toggleAiDrawer() {
+            document.getElementById('aiDrawer').classList.toggle('translate-x-full');
+        }
+
+        function handleUserTyping() {
+            clearTimeout(typingTimer);
+            document.getElementById('typingStatus').innerText = "Yazıyorsunuz...";
+            typingTimer = setTimeout(() => { document.getElementById('typingStatus').innerText = ""; }, 1000);
+        }
+
+        function sendAiMessage() {
+            const input = document.getElementById('aiUserInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chatBody = document.getElementById('aiChatBody');
+            chatBody.innerHTML += `<div class="bg-indigo-600 text-white p-3 rounded-2xl max-w-[85%] text-sm self-end ml-auto">${text}</div>`;
+            input.value = '';
+
+            setTimeout(() => {
+                let botReply = `LearnFast-EBA-BK-PORTAL üzerinden derslerinizi takip edebilir, Efroom ve DeuchLand platformlarındaki AI okuma modüllerini kullanabilirsiniz! 💡`;
+                chatBody.innerHTML += `<div class="bg-slate-200 text-slate-800 p-3 rounded-2xl max-w-[85%] text-sm">${botReply}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.speak(new SpeechSynthesisUtterance(botReply));
+                }
+            }, 1000);
+        }
+
+        function startVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'tr-TR';
+                recognition.onresult = function(event) {
+                    document.getElementById('aiUserInput').value = event.results[0][0].transcript;
+                    sendAiMessage();
+                };
+                recognition.start();
+            } else {
+                alert("Tarayıcınız ses tanımayı desteklemiyor.");
+            }
+        }
+
+        function triggerTeacherAnalytics(subject, unitNo) {
+            showModal(`
+                <h3 class="text-xl font-bold text-slate-900 mb-2">📊 Öğretmen Takip Paneli</h3>
+                <p class="text-sm text-slate-600 mb-4"><b>Ders:</b> ${subject} - <b>Ünite:</b> ${unitNo}</p>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center text-slate-600 text-sm">
+                    Sorumlu olduğunuz sınıfların öğrenci tamamlama ve test başarı istatistikleri burada görünür.
+                </div>
+            `);
+        }
+
+        function showModal(content) {
+            document.getElementById('modalInnerContent').innerHTML = content;
+            document.getElementById('contentModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            window.speechSynthesis.cancel();
+            isAutoReading = false;
+            document.getElementById('contentModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
